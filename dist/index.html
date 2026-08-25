@@ -22,3 +22,11 @@
       <div class="game-column">
         <div class="hud" aria-live="off">
           <div class="hud-block score-block"><span class="hud-label">SCORE</span><strong id="score">000000</strong></div>
+          <div class="hud-block"><span class="hud-label">BEST</span><strong id="best">000000</strong></div>
+          <div class="hud-block heat-block"><span class="hud-label">HEAT <span id="heatText">0%</span></span><span class="meter"><span id="heatFill" class="heat-fill"></span></span></div>
+          <div class="hud-block boost-block"><span class="hud-label">BOOST <span id="boostText">35%</span></span><span class="meter"><span id="boostFill" class="boost-fill"></span></span></div>
+          <div class="hud-block damage-block"><span class="hud-label">CAR</span><span id="health" class="health" aria-label="3 of 3 car health">◆ ◆ ◆</span></div>
+        </div>
+
+        <div id="gameFrame" class="game-frame">
+          <canvas id="gameCanvas" aria-label="Top-down neon driving game" role="img"></canvas>
