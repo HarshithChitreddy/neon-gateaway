@@ -57,4 +57,15 @@
   const playerY = () => height * (width < 650 ? 0.67 : 0.76);
   const roadX = (x) => width / 2 + x * roadWidth() / 2;
   const carSize = () => ({ w: roadWidth() * 0.175, h: clamp(roadWidth() * 0.29, 58, 100) });
+
+  function setScreen(name) {
+    for (const [key, el] of [['menu', ui.start], ['paused', ui.pause], ['ended', ui.end]]) {
+      const visible = key === name;
+      el.classList.toggle('hidden', !visible);
+      el.setAttribute('aria-hidden', String(!visible));
+    }
+    ui.pauseButton.hidden = name !== 'playing';
+  }
+  setScreen('menu');
+  updateHud(true);
 })();
