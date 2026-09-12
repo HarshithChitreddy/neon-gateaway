@@ -37,4 +37,14 @@
       boosting: false, combo: 0, lastNearMiss: -10, level: 1
     };
   }
+
+  function resize() {
+    const rect = frame.getBoundingClientRect();
+    width = Math.max(1, rect.width);
+    height = Math.max(1, rect.height);
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
 })();
