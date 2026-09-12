@@ -28,4 +28,13 @@
   let toastTimer = 0;
   let carId = 0;
   let game = makeGame('menu');
+
+  function makeGame(phase) {
+    return {
+      phase, time: 0, score: 0, nearMisses: 0, heat: 0, boost: 35, health: 3,
+      playerX: 0, playerV: 0, speed: 148, roadOffset: 0, spawnTimer: 0.45,
+      traffic: [], particles: [], flash: 0, shake: 0, invulnerable: 0,
+      boosting: false, combo: 0, lastNearMiss: -10, level: 1
+    };
+  }
 })();
