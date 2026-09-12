@@ -47,4 +47,14 @@
     canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const pad = (n) => String(Math.floor(n)).padStart(6, '0');
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const roadWidth = () => Math.min(width * (width < 650 ? 0.74 : 0.57), 530);
+  const playerY = () => height * (width < 650 ? 0.67 : 0.76);
+  const roadX = (x) => width / 2 + x * roadWidth() / 2;
+  const carSize = () => ({ w: roadWidth() * 0.175, h: clamp(roadWidth() * 0.29, 58, 100) });
 })();
