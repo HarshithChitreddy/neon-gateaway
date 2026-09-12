@@ -68,4 +68,15 @@
   }
   setScreen('menu');
   updateHud(true);
+
+  function start() {
+    game = makeGame('playing');
+    for (const key of Object.keys(keys)) keys[key] = false;
+    for (const set of Object.values(pointerHolds)) set.clear();
+    document.querySelectorAll('.touch-controls button').forEach((b) => b.classList.remove('pressed'));
+    setScreen('playing');
+    updateHud(true);
+    playTone(360, 0.08, 'sawtooth', 0.045);
+    requestAnimationFrame(() => frame.focus?.());
+  }
 })();
