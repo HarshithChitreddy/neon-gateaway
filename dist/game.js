@@ -112,4 +112,19 @@
     updateHud(true);
     playTone(95, 0.36, 'sawtooth', 0.07);
   }
+
+  function updateHud(force = false) {
+    if (!force && ambientTime - lastHudTime < 0.07) return;
+    lastHudTime = ambientTime;
+    ui.score.textContent = pad(game.score);
+    ui.best.textContent = pad(best);
+    ui.heat.style.width = `${clamp(game.heat, 0, 100)}%`;
+    ui.heatText.textContent = `${Math.ceil(game.heat)}%`;
+    ui.boost.style.width = `${clamp(game.boost, 0, 100)}%`;
+    ui.boostText.textContent = `${Math.floor(game.boost)}%`;
+    ui.health.textContent = '◆ '.repeat(game.health).trim() + (game.health < 3 ? ' ◇'.repeat(3 - game.health) : '');
+    ui.health.setAttribute('aria-label', `${game.health} of 3 car health`);
+    ui.speed.textContent = String(Math.round(game.speed));
+    ui.boostNotice.classList.toggle('active', game.boosting);
+  }
 })();
