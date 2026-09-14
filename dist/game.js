@@ -127,4 +127,12 @@
     ui.speed.textContent = String(Math.round(game.speed));
     ui.boostNotice.classList.toggle('active', game.boosting);
   }
+
+  function showToast(text, tone = 'good') {
+    ui.toast.textContent = text;
+    ui.toast.style.color = tone === 'bad' ? '#ff4a9c' : '#d9fa61';
+    ui.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => ui.toast.classList.remove('show'), 950);
+  }
 })();
