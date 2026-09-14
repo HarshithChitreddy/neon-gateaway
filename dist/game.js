@@ -79,4 +79,12 @@
     playTone(360, 0.08, 'sawtooth', 0.045);
     requestAnimationFrame(() => frame.focus?.());
   }
+  function pause() {
+    if (game.phase !== 'playing') return;
+    game.phase = 'paused';
+    keys.boost = false;
+    game.boosting = false;
+    setScreen('paused');
+    updateHud(true);
+  }
 })();
