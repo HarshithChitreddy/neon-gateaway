@@ -92,4 +92,24 @@
     game.phase = 'playing';
     setScreen('playing');
   }
+  function end(reason) {
+    if (game.phase !== 'playing') return;
+    game.phase = 'ended';
+    game.boosting = false;
+    const final = Math.floor(game.score);
+    const isBest = final > best;
+    if (isBest) {
+      best = final;
+      try { localStorage.setItem(BEST_KEY, String(best)); } catch (_) {}
+    }
+    ui.endKicker.textContent = isBest ? 'NEW HIGH SCORE' : 'RUN OVER';
+    ui.endTitle.innerHTML = reason === 'heat' ? 'BUSTED<span>.</span>' : 'TOTALLED<span>.</span>';
+    ui.endMessage.textContent = reason === 'heat' ? 'The city finally caught up.' : 'That was one hit too many.';
+    ui.finalScore.textContent = pad(final);
+    ui.finalBest.textContent = pad(best);
+    ui.finalNearMisses.textContent = String(game.nearMisses);
+    setScreen('ended');
+    updateHud(true);
+    playTone(95, 0.36, 'sawtooth', 0.07);
+  }
 })();
