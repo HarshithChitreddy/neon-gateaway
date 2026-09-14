@@ -87,4 +87,9 @@
     setScreen('paused');
     updateHud(true);
   }
+  function resume() {
+    if (game.phase !== 'paused') return;
+    game.phase = 'playing';
+    setScreen('playing');
+  }
 })();
