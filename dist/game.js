@@ -153,4 +153,23 @@
       osc.stop(audioContext.currentTime + duration);
     } catch (_) {}
   }
+
+  function spawnTraffic() {
+    const level = Math.floor(game.time / 18) + 1;
+    const pressure = game.heat / 100;
+    const lane = Math.floor(Math.random() * lanes.length);
+    const police = game.time > 14 && Math.random() < 0.1 + pressure * 0.33;
+    const common = {
+      id: ++carId, y: -0.18, checked: false, hit: false,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedFactor: rand(.83, 1.12)
+    };
+    game.traffic.push({ ...common, x: lanes[lane], police });
+    if (game.time > 25 && Math.random() < Math.min(.35, .1 + level * .035)) {
+      const other = (lane + 2 + Math.floor(Math.random() * 2)) % lanes.length;
+      game.traffic.push({ ...common, id: ++carId, x: lanes[other], y: -0.31, checked: false, police: false,
+        color: colors[Math.floor(Math.random() * colors.length)] });
+    }
+    game.spawnTimer = Math.max(.47, rand(.75, 1.18) - Math.min(.24, game.time * .0025));
+  }
 })();
