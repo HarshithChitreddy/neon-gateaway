@@ -176,4 +176,79 @@
   function makeSparks(x, y, color, amount) {
     for (let i = 0; i < amount; i++) game.particles.push({ x, y, vx: rand(-170, 170), vy: rand(-120, 160), life: rand(.2, .6), max: .6, color });
   }
+
+  function update(dt) {
+    const g = game;
+    g.time += dt;
+    g.level = Math.floor(g.time / 18) + 1;
+    g.boosting = keys.boost && g.boost > 1;
+    g.speed = (148 + Math.min(g.time * 1.6, 90)) * (g.boosting ? 1.58 : 1);
+    g.roadOffset += dt * (g.boosting ? 690 : 420 + Math.min(g.time * 3, 150));
+    g.score += dt * g.speed * (g.boosting ? .65 : .42);
+    g.heat = clamp(g.heat + dt * (.56 + Math.min(g.time * .025, 1.65)), 0, 100);
+    g.boost = clamp(g.boost + (g.boosting ? -28 : .85) * dt, 0, 100);
+    g.invulnerable = Math.max(0, g.invulnerable - dt);
+    g.flash = Math.max(0, g.flash - dt * 2.4);
+    g.shake = Math.max(0, g.shake - dt * 10);
+    if (g.time - g.lastNearMiss > 4) g.combo = 0;
+
+    const steer = Number(keys.right) - Number(keys.left);
+    g.playerV += steer * 6.1 * dt;
+    g.playerV *= Math.exp(-6.2 * dt);
+    g.playerX += g.playerV * dt;
+    if (g.playerX < -.83 || g.playerX > .83) {
+      g.playerX = clamp(g.playerX, -.83, .83);
+      g.playerV *= -.16;
+      g.heat = clamp(g.heat + dt * 1.8, 0, 100);
+    }
+
+    g.spawnTimer -= dt;
+    if (g.spawnTimer <= 0) spawnTraffic();
+    const pY = playerY();
+    const { h } = carSize();
+    for (const car of g.traffic) {
+      car.y += dt * (g.boosting ? .64 : .43 + Math.min(g.time * .0014, .12)) * car.speedFactor;
+      const cy = car.y * height;
+      const dx = Math.abs(car.x - g.playerX);
+      if (!car.hit && g.invulnerable <= 0 && Math.abs(cy - pY) < h * .71 && dx < .315) {
+        car.hit = true;
+        car.checked = true;
+        g.health--;
+        g.heat = clamp(g.heat + (car.police ? 35 : 27), 0, 100);
+        g.boost = Math.max(0, g.boost - 12);
+        g.invulnerable = 1.5;
+        g.flash = .78;
+        g.shake = 7;
+        g.playerV += (g.playerX >= car.x ? 1 : -1) * 1.5;
+        makeSparks(roadX(g.playerX), pY, '#ffca68', 22);
+        showToast(car.police ? 'POLICE HIT! +35 HEAT' : 'CRASH! +27 HEAT', 'bad');
+        playTone(95, .25, 'sawtooth', .08);
+        if (g.health <= 0) { end('health'); break; }
+        if (g.heat >= 100) { end('heat'); break; }
+      }
+      if (!car.checked && cy > pY + h * .72) {
+        car.checked = true;
+        if (dx >= .315 && dx < .62) {
+          g.nearMisses++;
+          g.combo = Math.min(5, g.combo + 1);
+          g.lastNearMiss = g.time;
+          g.boost = clamp(g.boost + 22, 0, 100);
+          g.heat = Math.max(0, g.heat - 3);
+          g.score += 220 * g.combo;
+          makeSparks(roadX(g.playerX), pY - h * .3, '#d9fa61', 8);
+          showToast(g.combo >= 2 ? `CLOSE CALL ×${g.combo}  +${220 * g.combo}` : 'CLOSE CALL  +220');
+          playTone(580 + g.combo * 90, .12, 'triangle', .045);
+        }
+      }
+    }
+    g.traffic = g.traffic.filter((car) => car.y < 1.27 && !car.hit);
+    for (const particle of g.particles) {
+      particle.x += particle.vx * dt;
+      particle.y += particle.vy * dt;
+      particle.life -= dt;
+    }
+    g.particles = g.particles.filter((p) => p.life > 0);
+    if (g.heat >= 100) end('heat');
+    updateHud();
+  }
 })();
