@@ -172,4 +172,8 @@
     }
     game.spawnTimer = Math.max(.47, rand(.75, 1.18) - Math.min(.24, game.time * .0025));
   }
+
+  function makeSparks(x, y, color, amount) {
+    for (let i = 0; i < amount; i++) game.particles.push({ x, y, vx: rand(-170, 170), vy: rand(-120, 160), life: rand(.2, .6), max: .6, color });
+  }
 })();
