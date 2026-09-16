@@ -135,4 +135,22 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => ui.toast.classList.remove('show'), 950);
   }
+
+  function playTone(freq, duration, type = 'sine', volume = 0.03) {
+    if (!audioEnabled) return;
+    try {
+      audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === 'suspended') audioContext.resume();
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(Math.max(50, freq * .62), audioContext.currentTime + duration);
+      gain.gain.setValueAtTime(volume, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, audioContext.currentTime + duration);
+      osc.connect(gain).connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + duration);
+    } catch (_) {}
+  }
 })();
