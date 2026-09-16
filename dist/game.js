@@ -251,4 +251,11 @@
     if (g.heat >= 100) end('heat');
     updateHud();
   }
+
+  function roundedRect(x, y, w, h, r, fill) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
 })();
