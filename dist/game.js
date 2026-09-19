@@ -362,4 +362,40 @@
     }
     ctx.restore();
   }
+
+  function draw() {
+    ctx.save();
+    if (game.shake > 0) ctx.translate(rand(-game.shake, game.shake), rand(-game.shake, game.shake));
+    drawWorld();
+    const pY = playerY();
+    for (const car of game.traffic) drawCar(roadX(car.x), car.y * height, car.police ? '#e8eef8' : car.color, false, car.police);
+    if (game.heat > 22 && game.phase !== 'menu') {
+      const proximity = (game.heat - 22) / 78;
+      const policeY = height * (1.17 - proximity * .17);
+      ctx.save(); ctx.globalAlpha = .25 + proximity * .44;
+      drawCar(roadX(game.playerX * .35), policeY, '#eef2ff', false, true);
+      ctx.restore();
+      if (game.heat > 65) {
+        ctx.fillStyle = Math.floor(ambientTime * 5) % 2 ? 'rgba(255,30,98,.035)' : 'rgba(41,85,255,.035)';
+        ctx.fillRect(0, 0, width, height);
+      }
+    }
+    if (game.phase !== 'menu') {
+      ctx.save();
+      if (game.invulnerable > 0 && Math.floor(ambientTime * 12) % 2 === 0) ctx.globalAlpha = .46;
+      drawCar(roadX(game.playerX), pY, '#35eaf7', true, false, game.flash > .5);
+      ctx.restore();
+    } else drawCar(roadX(0), pY, '#35eaf7', true);
+    for (const p of game.particles) {
+      ctx.globalAlpha = clamp(p.life / p.max, 0, 1);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, 3, 3);
+    }
+    ctx.globalAlpha = 1;
+    if (game.flash > 0) {
+      ctx.fillStyle = `rgba(255,45,125,${game.flash * .23})`;
+      ctx.fillRect(0, 0, width, height);
+    }
+    ctx.restore();
+  }
 })();
