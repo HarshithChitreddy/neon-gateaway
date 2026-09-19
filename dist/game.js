@@ -264,4 +264,23 @@
     if (glow) { ctx.shadowColor = color; ctx.shadowBlur = glow; }
     ctx.stroke(); ctx.shadowBlur = 0;
   }
+  function building(side, row, offset, leftEdge, rightEdge) {
+    const seed = Math.abs(Math.sin(row * 58.17 + (side === -1 ? 13 : 37)));
+    const bw = Math.max(25, (width - roadWidth()) / 2 - 20);
+    const x = side === -1 ? leftEdge - bw - 13 : rightEdge + 13;
+    const y = row * 118 + offset;
+    const hh = 93 + seed * 18;
+    roundedRect(x, y, bw, hh, 4, seed > .5 ? '#151735' : '#11132c');
+    ctx.fillStyle = '#232747';
+    for (let k = 0; k < 3; k++) {
+      for (let j = 0; j < Math.max(1, Math.floor((bw - 18) / 25)); j++) {
+        const on = Math.sin(row * 14 + k * 8 + j * 6 + side * 3) > .14;
+        ctx.fillStyle = on ? (seed > .48 ? '#8959a5' : '#267d9c') : '#272943';
+        ctx.fillRect(x + 10 + j * 25, y + 15 + k * 22, 11, 8);
+      }
+    }
+    if (seed > .75) {
+      strokeLine(side === -1 ? x + bw : x, y + 9, side === -1 ? x + bw : x, y + hh - 9, side === -1 ? '#ff2c9b' : '#2fe6e9', 2, 13);
+    }
+  }
 })();
