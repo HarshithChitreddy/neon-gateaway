@@ -283,4 +283,40 @@
       strokeLine(side === -1 ? x + bw : x, y + 9, side === -1 ? x + bw : x, y + hh - 9, side === -1 ? '#ff2c9b' : '#2fe6e9', 2, 13);
     }
   }
+  function drawWorld() {
+    const rw = roadWidth();
+    const left = width / 2 - rw / 2;
+    const right = width / 2 + rw / 2;
+    ctx.fillStyle = '#090b20'; ctx.fillRect(0, 0, width, height);
+    const offset = game.roadOffset % 118;
+    for (let row = -2; row < Math.ceil(height / 118) + 1; row++) {
+      building(-1, row + Math.floor(game.roadOffset / 118), offset, left, right);
+      building(1, row + Math.floor(game.roadOffset / 118), offset, left, right);
+    }
+    const roadGradient = ctx.createLinearGradient(left, 0, right, 0);
+    roadGradient.addColorStop(0, '#1a1d37'); roadGradient.addColorStop(.16, '#22243e');
+    roadGradient.addColorStop(.5, '#23243d'); roadGradient.addColorStop(.84, '#22243e');
+    roadGradient.addColorStop(1, '#1a1d37');
+    ctx.fillStyle = roadGradient; ctx.fillRect(left, 0, rw, height);
+    const wash = ctx.createLinearGradient(0, 0, 0, height);
+    wash.addColorStop(0, 'rgba(252,30,151,.07)'); wash.addColorStop(.5, 'rgba(37,236,243,.02)'); wash.addColorStop(1, 'rgba(252,30,151,.06)');
+    ctx.fillStyle = wash; ctx.fillRect(left, 0, rw, height);
+    strokeLine(left + 3, 0, left + 3, height, '#ff3aa7', 4, 17);
+    strokeLine(right - 3, 0, right - 3, height, '#35eaf7', 4, 17);
+    strokeLine(left + 12, 0, left + 12, height, '#f3a3c9', 1);
+    strokeLine(right - 12, 0, right - 12, height, '#99f3f7', 1);
+    ctx.fillStyle = 'rgba(244,244,255,.30)';
+    const dash = game.roadOffset % 92;
+    for (let lane = 1; lane < 4; lane++) {
+      const x = left + rw * lane / 4;
+      for (let y = -92 + dash; y < height + 92; y += 92) roundedRect(x - 1, y, 2, 42, 1, 'rgba(243,245,255,.32)');
+    }
+    for (let y = -60 + (game.roadOffset % 120); y < height + 60; y += 120) {
+      strokeLine(left - 9, y, left - 18, y + 20, '#ff3aa7', 2, 10);
+      strokeLine(right + 9, y, right + 18, y + 20, '#35eaf7', 2, 10);
+    }
+    const centerGlow = ctx.createRadialGradient(width / 2, height * .72, 5, width / 2, height * .72, rw * .8);
+    centerGlow.addColorStop(0, 'rgba(43,224,240,.045)'); centerGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = centerGlow; ctx.fillRect(left, 0, rw, height);
+  }
 })();
