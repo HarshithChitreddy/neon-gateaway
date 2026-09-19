@@ -258,4 +258,10 @@
     ctx.fillStyle = fill;
     ctx.fill();
   }
+  function strokeLine(x1, y1, x2, y2, color, lineWidth, glow = 0) {
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = color; ctx.lineWidth = lineWidth;
+    if (glow) { ctx.shadowColor = color; ctx.shadowBlur = glow; }
+    ctx.stroke(); ctx.shadowBlur = 0;
+  }
 })();
