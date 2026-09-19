@@ -319,4 +319,47 @@
     centerGlow.addColorStop(0, 'rgba(43,224,240,.045)'); centerGlow.addColorStop(1, 'transparent');
     ctx.fillStyle = centerGlow; ctx.fillRect(left, 0, rw, height);
   }
+
+  function drawCar(x, y, color, isPlayer = false, police = false, flash = false) {
+    const { w, h } = carSize();
+    ctx.save();
+    ctx.translate(x, y);
+    if (isPlayer) ctx.rotate(clamp(game.playerV * -.085, -.13, .13));
+    ctx.shadowColor = color; ctx.shadowBlur = isPlayer ? 25 : 14;
+    roundedRect(-w * .58, -h * .36, w * 1.16, h * .83, w * .15, 'rgba(0,0,0,.38)');
+    ctx.shadowBlur = 0;
+    roundedRect(-w * .5, -h * .5, w, h, w * .16, flash ? '#fff' : color);
+    roundedRect(-w * .37, -h * .31, w * .74, h * .25, w * .07, isPlayer ? '#102d47' : '#17223c');
+    roundedRect(-w * .34, h * .12, w * .68, h * .22, w * .07, isPlayer ? '#112941' : '#12192e');
+    roundedRect(-w * .38, -h * .43, w * .76, h * .06, 2, isPlayer ? '#d8fff9' : '#d6e2ee');
+    roundedRect(-w * .56, -h * .31, w * .1, h * .22, 2, '#0a0c1c');
+    roundedRect(w * .46, -h * .31, w * .1, h * .22, 2, '#0a0c1c');
+    roundedRect(-w * .56, h * .22, w * .1, h * .21, 2, '#0a0c1c');
+    roundedRect(w * .46, h * .22, w * .1, h * .21, 2, '#0a0c1c');
+    ctx.shadowBlur = 10; ctx.shadowColor = '#ff345d';
+    ctx.fillStyle = '#ff415f'; ctx.fillRect(-w * .38, h * .43, w * .18, 4); ctx.fillRect(w * .2, h * .43, w * .18, 4);
+    ctx.shadowBlur = 0;
+    if (isPlayer) {
+      roundedRect(-w * .12, -h * .45, w * .24, h * .73, 3, '#173249');
+      strokeLine(-w * .17, -h * .18, -w * .17, h * .29, '#c7ffff', 2);
+      strokeLine(w * .17, -h * .18, w * .17, h * .29, '#c7ffff', 2);
+      if (game.boosting) {
+        ctx.fillStyle = '#4ff4ff'; ctx.shadowColor = '#35eaf7'; ctx.shadowBlur = 20;
+        ctx.beginPath(); ctx.moveTo(-w * .24, h * .48); ctx.lineTo(-w * .12, h * (.75 + Math.random() * .3)); ctx.lineTo(0, h * .48); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(w * .03, h * .48); ctx.lineTo(w * .2, h * (.75 + Math.random() * .3)); ctx.lineTo(w * .34, h * .48); ctx.fill();
+      }
+    }
+    if (police) {
+      roundedRect(-w * .34, -h * .04, w * .68, h * .11, 2, '#0a1130');
+      const blink = Math.floor(ambientTime * 9) % 2 === 0;
+      ctx.shadowBlur = 18;
+      ctx.shadowColor = blink ? '#fe3772' : '#335fff';
+      ctx.fillStyle = blink ? '#fe3772' : '#335fff';
+      ctx.fillRect(-w * .27, -h * .03, w * .24, h * .07);
+      ctx.shadowColor = blink ? '#335fff' : '#fe3772';
+      ctx.fillStyle = blink ? '#335fff' : '#fe3772';
+      ctx.fillRect(w * .03, -h * .03, w * .24, h * .07);
+    }
+    ctx.restore();
+  }
 })();
