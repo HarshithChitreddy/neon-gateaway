@@ -431,4 +431,5 @@
     }
   });
   window.addEventListener('keyup', (event) => { const action = mapKey(event.code); if (action) keys[action] = false; });
+  window.addEventListener('blur', () => { for (const key of Object.keys(keys)) keys[key] = false; if (game.phase === 'playing') pause(); });
 })();
