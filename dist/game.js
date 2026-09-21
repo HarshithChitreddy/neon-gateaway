@@ -416,4 +416,18 @@
     if (code === 'Space' || code === 'ShiftLeft' || code === 'ShiftRight') return 'boost';
     return null;
   }
+  window.addEventListener('keydown', (event) => {
+    const action = mapKey(event.code);
+    if (action) {
+      event.preventDefault();
+      keys[action] = true;
+    }
+    if ((event.code === 'KeyP' || event.code === 'Escape') && !event.repeat) {
+      if (game.phase === 'playing') pause(); else if (game.phase === 'paused') resume();
+    }
+    if (event.code === 'Enter' && !event.repeat) {
+      if (game.phase === 'menu' || game.phase === 'ended') start();
+      else if (game.phase === 'paused') resume();
+    }
+  });
 })();
