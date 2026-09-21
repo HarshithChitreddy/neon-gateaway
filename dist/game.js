@@ -430,4 +430,5 @@
       else if (game.phase === 'paused') resume();
     }
   });
+  window.addEventListener('keyup', (event) => { const action = mapKey(event.code); if (action) keys[action] = false; });
 })();
