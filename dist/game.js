@@ -398,4 +398,15 @@
     }
     ctx.restore();
   }
+
+  function loop(now) {
+    const dt = Math.min(.033, Math.max(0, (now - (lastTime || now)) / 1000));
+    lastTime = now;
+    ambientTime += dt;
+    if (game.phase === 'playing') update(dt);
+    else if (game.phase === 'menu') game.roadOffset += dt * 110;
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 })();
