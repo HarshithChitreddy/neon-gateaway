@@ -409,4 +409,11 @@
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
+
+  function mapKey(code) {
+    if (code === 'ArrowLeft' || code === 'KeyA') return 'left';
+    if (code === 'ArrowRight' || code === 'KeyD') return 'right';
+    if (code === 'Space' || code === 'ShiftLeft' || code === 'ShiftRight') return 'boost';
+    return null;
+  }
 })();
