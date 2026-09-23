@@ -433,4 +433,21 @@
   window.addEventListener('keyup', (event) => { const action = mapKey(event.code); if (action) keys[action] = false; });
   window.addEventListener('blur', () => { for (const key of Object.keys(keys)) keys[key] = false; if (game.phase === 'playing') pause(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden && game.phase === 'playing') pause(); });
+
+  function bindHold(id, action) {
+    const button = $(id);
+    button.addEventListener('pointerdown', (event) => {
+      event.preventDefault(); button.setPointerCapture(event.pointerId);
+      pointerHolds[action].add(event.pointerId); keys[action] = true; button.classList.add('pressed');
+    });
+    const release = (event) => {
+      pointerHolds[action].delete(event.pointerId);
+      keys[action] = pointerHolds[action].size > 0;
+      button.classList.toggle('pressed', keys[action]);
+    };
+    button.addEventListener('pointerup', release);
+    button.addEventListener('pointercancel', release);
+    button.addEventListener('lostpointercapture', release);
+  }
+  bindHold('leftButton', 'left'); bindHold('rightButton', 'right'); bindHold('touchBoost', 'boost');
 })();
