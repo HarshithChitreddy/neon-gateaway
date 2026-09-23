@@ -450,4 +450,5 @@
     button.addEventListener('lostpointercapture', release);
   }
   bindHold('leftButton', 'left'); bindHold('rightButton', 'right'); bindHold('touchBoost', 'boost');
+  $('startButton').addEventListener('click', start);
 })();
