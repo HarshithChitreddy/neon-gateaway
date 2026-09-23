@@ -452,4 +452,5 @@
   bindHold('leftButton', 'left'); bindHold('rightButton', 'right'); bindHold('touchBoost', 'boost');
   $('startButton').addEventListener('click', start);
   $('restartButton').addEventListener('click', start);
+  $('resumeButton').addEventListener('click', resume);
 })();
