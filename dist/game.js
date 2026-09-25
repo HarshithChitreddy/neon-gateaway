@@ -453,4 +453,5 @@
   $('startButton').addEventListener('click', start);
   $('restartButton').addEventListener('click', start);
   $('resumeButton').addEventListener('click', resume);
+  ui.pauseButton.addEventListener('click', pause);
 })();
