@@ -454,4 +454,12 @@
   $('restartButton').addEventListener('click', start);
   $('resumeButton').addEventListener('click', resume);
   ui.pauseButton.addEventListener('click', pause);
+  ui.soundButton.addEventListener('click', () => {
+    audioEnabled = !audioEnabled;
+    ui.soundLabel.textContent = audioEnabled ? 'ON' : 'OFF';
+    ui.soundButton.setAttribute('aria-label', `Turn sound ${audioEnabled ? 'off' : 'on'}`);
+    if (audioEnabled) playTone(660, .08, 'triangle', .04);
+  });
+
+  // A small read-only hook helps automated smoke tests inspect live game state.
 })();
