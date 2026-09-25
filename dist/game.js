@@ -462,4 +462,9 @@
   });
 
   // A small read-only hook helps automated smoke tests inspect live game state.
+  window.__neonGetaway = { getState: () => ({
+    phase: game.phase, score: Math.floor(game.score), best, heat: game.heat,
+    boost: game.boost, health: game.health, nearMisses: game.nearMisses,
+    traffic: game.traffic.length, playerX: game.playerX, speed: game.speed
+  }) };
 })();
